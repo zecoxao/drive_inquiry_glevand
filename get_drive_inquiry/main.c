@@ -1,3 +1,18 @@
+/*
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -29,6 +44,14 @@ int ps3rom_lv2_get_inquiry(int fd, uint8_t *buffer) {
     return res;
 }
 
+void init_atapi_cmnd_block( struct lv2_atapi_cmnd_block *atapi_cmnd, uint32_t block_size, uint32_t proto, uint32_t type) {
+    memset(atapi_cmnd, 0, sizeof(struct lv2_atapi_cmnd_block));
+    atapi_cmnd->pktlen = 12; // 0xC
+    atapi_cmnd->blocks = 1;
+    atapi_cmnd->block_size = block_size; /* transfer size is block_size * blocks */
+    atapi_cmnd->proto = proto;
+    atapi_cmnd->in_out = type;
+}
 
 
 int sys_storage_send_atapi_command(uint32_t fd, struct lv2_atapi_cmnd_block *atapi_cmnd, uint8_t *buffer) 
@@ -38,15 +61,13 @@ int sys_storage_send_atapi_command(uint32_t fd, struct lv2_atapi_cmnd_block *ata
     return_to_user_prog(int);
 }
 
-
-
 void main ()
 {
-	// this poke allows us to use storage open on 4.21
-	lv2_poke(0x8000000000017B2CULL,0x386000014e800020ULL );
+	// this poke allows us to use storage open on 4.82DEX
+	lv2_poke(0x80000000000191E0ULL,0x386000014e800020ULL );
 	printf("lv2 poked...\n");
 
-	int fd;
+	uint32_t fd;
 	int ret;
 	uint8_t buf[0x38];
 	memset(buf,0,0x38);
@@ -77,5 +98,5 @@ void main ()
 	pFile = fopen ( "/dev_hdd0/game/myfile.bin" , "wb" );
 	fwrite (buf , 1 , sizeof(buf) , pFile );
 	fclose (pFile);
-	print("file written...\n");
+	printf("file written...\n");
 }

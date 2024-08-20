@@ -19,7 +19,7 @@
 
 #include <stdint.h>
 
-#include <ppu-lv2.h>
+#include <sys/syscall.h>
 
 struct storage_device_info {
 	uint8_t res1[32];
@@ -43,7 +43,7 @@ struct platform_info {
  */
 static inline int sys_game_get_temperature(int proc, uint32_t * temperature)
 {
-	lv2syscall2(383, proc, (uint64_t) temperature);
+	system_call_2(383, proc, (uint64_t) temperature);
 	return_to_user_prog(int);
 }
 
@@ -52,7 +52,7 @@ static inline int sys_game_get_temperature(int proc, uint32_t * temperature)
  */
 static inline uint64_t lv2_peek(uint64_t addr)
 {
-	lv2syscall1(6, addr);
+	system_call_1(6, addr);
 	return_to_user_prog(uint64_t);
 }
 
@@ -61,7 +61,7 @@ static inline uint64_t lv2_peek(uint64_t addr)
  */
 static inline void lv2_poke(uint64_t addr, uint64_t val)
 {
-	lv2syscall2(7, addr, val);
+	system_call_2(7, addr, val);
 }
 
 /*
@@ -69,7 +69,7 @@ static inline void lv2_poke(uint64_t addr, uint64_t val)
  */
 static inline uint64_t lv2_lv1_peek(uint64_t addr)
 {
-	lv2syscall1(8, addr);
+	system_call_1(8, addr);
 	return_to_user_prog(uint64_t);
 }
 
@@ -78,7 +78,7 @@ static inline uint64_t lv2_lv1_peek(uint64_t addr)
  */
 static inline void lv2_lv1_poke(uint64_t addr, uint64_t val)
 {
-	lv2syscall2(9, addr, val);
+	system_call_2(9, addr, val);
 }
 
 /*
@@ -86,7 +86,7 @@ static inline void lv2_lv1_poke(uint64_t addr, uint64_t val)
  */
 static inline int lv2_av_send(const void *buf, uint64_t size, uint64_t flags)
 {
-	lv2syscall3(369, (uint64_t) buf, size, flags);
+	system_call_3(369, (uint64_t) buf, size, flags);
 	return_to_user_prog(int);
 }
 
@@ -95,7 +95,7 @@ static inline int lv2_av_send(const void *buf, uint64_t size, uint64_t flags)
  */
 static inline int lv2_sm_shutdown(uint16_t op, const void *buf, uint64_t size)
 {
-	lv2syscall3(379, op, (uint64_t) buf, size);
+	system_call_3(379, op, (uint64_t) buf, size);
 	return_to_user_prog(int);
 }
 
@@ -105,7 +105,7 @@ static inline int lv2_sm_shutdown(uint16_t op, const void *buf, uint64_t size)
 static inline int lv2_sm_get_params(uint64_t *unknown1, uint64_t *unknown2,
 	uint64_t *unknown3, uint64_t *unknown4)
 {
-	lv2syscall4(380, (uint64_t) unknown1, (uint64_t) unknown2,
+	system_call_4(380, (uint64_t) unknown1, (uint64_t) unknown2,
 		(uint64_t) unknown3, (uint64_t) unknown4);
 	return_to_user_prog(int);
 }
@@ -115,7 +115,7 @@ static inline int lv2_sm_get_params(uint64_t *unknown1, uint64_t *unknown2,
  */
 static inline int lv2_sm_control_led(uint8_t p, uint8_t s)
 {
-	lv2syscall2(386, p, s);
+	system_call_2(386, p, s);
 	return_to_user_prog(int);
 }
 
@@ -124,7 +124,7 @@ static inline int lv2_sm_control_led(uint8_t p, uint8_t s)
  */
 static inline int lv2_get_platform_info(struct platform_info *info)
 {
-	lv2syscall1(387, (uint64_t) info);
+	system_call_1(387, (uint64_t) info);
 	return_to_user_prog(int);
 }
 
@@ -133,7 +133,7 @@ static inline int lv2_get_platform_info(struct platform_info *info)
  */
 static inline int lv2_sm_ring_buzzer(uint64_t unknown1, uint8_t unknown2, uint32_t unknown3)
 {
-	lv2syscall3(392, unknown1, unknown2, unknown3);
+	system_call_3(392, unknown1, unknown2, unknown3);
 	return_to_user_prog(int);
 }
 
@@ -142,7 +142,7 @@ static inline int lv2_sm_ring_buzzer(uint64_t unknown1, uint8_t unknown2, uint32
  */
 static inline int lv2_get_sys_hw_config(uint8_t *res, uint64_t *val)
 {
-	lv2syscall2(393, (uint64_t) res, (uint64_t) val);
+	system_call_2(393, (uint64_t) res, (uint64_t) val);
 	return_to_user_prog(int);
 }
 
@@ -151,7 +151,7 @@ static inline int lv2_get_sys_hw_config(uint8_t *res, uint64_t *val)
  */
 static inline int lv2_lv1_log_write(const char *s, unsigned int len)
 {
-	lv2syscall2(398, (uint64_t) s, len);
+	system_call_2(398, (uint64_t) s, len);
 	return_to_user_prog(int);
 }
 
@@ -160,7 +160,7 @@ static inline int lv2_lv1_log_write(const char *s, unsigned int len)
  */
 static inline int lv2_storage_open(uint64_t dev_id, uint32_t *dev_handle)
 {
-	lv2syscall4(600, dev_id, 0, (uint64_t) dev_handle, 0);
+	system_call_4(600, dev_id, 0, (uint64_t) dev_handle, 0);
 	return_to_user_prog(int);
 }
 
@@ -169,7 +169,7 @@ static inline int lv2_storage_open(uint64_t dev_id, uint32_t *dev_handle)
  */
 static inline int lv2_storage_close(uint32_t dev_handle)
 {
-	lv2syscall1(601, dev_handle);
+	system_call_1(601, dev_handle);
 	return_to_user_prog(int);
 }
 
@@ -179,7 +179,7 @@ static inline int lv2_storage_close(uint32_t dev_handle)
 static inline int lv2_storage_read(uint32_t dev_handle, uint64_t unknown1, uint64_t start_sector, uint64_t sector_count,
 	const void *buf, uint32_t *unknown2, uint64_t flags)
 {
-	lv2syscall7(602, dev_handle, unknown1, start_sector, sector_count,
+	system_call_7(602, dev_handle, unknown1, start_sector, sector_count,
 		(uint64_t ) buf, (uint64_t) unknown2, flags);
 	return_to_user_prog(int);
 }
@@ -190,7 +190,7 @@ static inline int lv2_storage_read(uint32_t dev_handle, uint64_t unknown1, uint6
 static inline int lv2_storage_write(uint32_t dev_handle, uint64_t unknown1, uint64_t start_sector, uint64_t sector_count,
 	const void *buf, uint32_t *unknown2, uint64_t flags)
 {
-	lv2syscall7(603, dev_handle, unknown1, start_sector, sector_count,
+	system_call_7(603, dev_handle, unknown1, start_sector, sector_count,
 		(uint64_t ) buf, (uint64_t) unknown2, flags);
 	return_to_user_prog(int);
 }
@@ -200,7 +200,7 @@ static inline int lv2_storage_write(uint32_t dev_handle, uint64_t unknown1, uint
  */
 static inline int lv2_storage_get_device_info(uint64_t dev_id, struct storage_device_info *info)
 {
-	lv2syscall2(609, dev_id, (uint64_t) info);
+	system_call_2(609, dev_id, (uint64_t) info);
 	return_to_user_prog(int);
 }
 
@@ -210,7 +210,7 @@ static inline int lv2_storage_get_device_info(uint64_t dev_id, struct storage_de
 static inline int lv2_storage_create_region(uint32_t dev_handle, uint64_t start_sector,
 	uint64_t sector_count, uint64_t unknown, uint64_t laid, uint64_t *region_id)
 {
-	lv2syscall6(614, dev_handle, start_sector, sector_count, unknown, laid, (uint64_t) region_id);
+	system_call_6(614, dev_handle, start_sector, sector_count, unknown, laid, (uint64_t) region_id);
 	return_to_user_prog(int);
 }
 
@@ -219,7 +219,7 @@ static inline int lv2_storage_create_region(uint32_t dev_handle, uint64_t start_
  */
 static inline int lv2_storage_delete_region(uint32_t dev_handle, uint64_t region_id)
 {
-	lv2syscall2(615, dev_handle, region_id);
+	system_call_2(615, dev_handle, region_id);
 	return_to_user_prog(int);
 }
 
@@ -230,7 +230,7 @@ static inline int lv2_storage_execute_device_command(uint32_t dev_handle, uint64
 	const void *cmdbuf, uint64_t cmdbuf_size, void *databuf, uint64_t databuf_size,
 	uint64_t *unknown)
 {
-	lv2syscall7(616, dev_handle, cmd, (uint64_t) cmdbuf, cmdbuf_size,
+	system_call_7(616, dev_handle, cmd, (uint64_t) cmdbuf, cmdbuf_size,
 		(uint64_t) databuf, databuf_size, (uint64_t) unknown);
 	return_to_user_prog(int);
 }
@@ -240,7 +240,7 @@ static inline int lv2_storage_execute_device_command(uint32_t dev_handle, uint64
  */
 static inline int lv2_gelic_eurus_control(uint16_t cmd, uint8_t *cmdbuf, uint64_t cmdbuf_size)
 {
-	lv2syscall3(726, cmd, (uint64_t) cmdbuf, cmdbuf_size);
+	system_call_3(726, cmd, (uint64_t) cmdbuf, cmdbuf_size);
 	return_to_user_prog(int);
 }
 
@@ -249,7 +249,7 @@ static inline int lv2_gelic_eurus_control(uint16_t cmd, uint8_t *cmdbuf, uint64_
  */
 static inline int lv2_cell_fs_util_umount(const char *dir, uint64_t unknown)
 {
-	lv2syscall2(838, (uint64_t) dir, unknown);
+	system_call_2(838, (uint64_t) dir, unknown);
 	return_to_user_prog(int);
 }
 
@@ -258,7 +258,7 @@ static inline int lv2_cell_fs_util_umount(const char *dir, uint64_t unknown)
  */
 static inline int lv2_cell_fs_util_sync(const char *dir)
 {
-	lv2syscall1(839, (uint64_t) dir);
+	system_call_1(839, (uint64_t) dir);
 	return_to_user_prog(int);
 }
 
@@ -268,7 +268,7 @@ static inline int lv2_cell_fs_util_sync(const char *dir)
 static inline int lv2_ss_vtrm_mgr_if(uint32_t packet_id, uint64_t arg1, uint64_t arg2,
 	uint64_t arg3, uint64_t arg4)
 {
-	lv2syscall5(862, packet_id, arg1, arg2, arg3, arg4);
+	system_call_5(862, packet_id, arg1, arg2, arg3, arg4);
 	return_to_user_prog(int);
 }
 
@@ -278,7 +278,7 @@ static inline int lv2_ss_vtrm_mgr_if(uint32_t packet_id, uint64_t arg1, uint64_t
 static inline int lv2_ss_update_mgr_if(uint32_t packet_id, uint64_t arg1, uint64_t arg2,
 	uint64_t arg3, uint64_t arg4, uint64_t arg5, uint64_t arg6)
 {
-	lv2syscall7(863, packet_id, arg1, arg2, arg3, arg4, arg5, arg6);
+	system_call_7(863, packet_id, arg1, arg2, arg3, arg4, arg5, arg6);
 	return_to_user_prog(int);
 }
 
@@ -287,7 +287,7 @@ static inline int lv2_ss_update_mgr_if(uint32_t packet_id, uint64_t arg1, uint64
  */
 static inline int lv2_ss_stor_mgr_if(uint32_t packet_id, uint64_t arg1)
 {
-	lv2syscall2(864, packet_id, arg1);
+	system_call_2(864, packet_id, arg1);
 	return_to_user_prog(int);
 }
 
@@ -296,7 +296,7 @@ static inline int lv2_ss_stor_mgr_if(uint32_t packet_id, uint64_t arg1)
  */
 static inline int lv2_ss_secure_rtc_if(uint32_t packet_id, uint64_t arg1, uint64_t arg2, uint64_t arg3)
 {
-	lv2syscall4(866, packet_id, arg1, arg2, arg3);
+	system_call_4(866, packet_id, arg1, arg2, arg3);
 	return_to_user_prog(int);
 }
 
@@ -305,7 +305,7 @@ static inline int lv2_ss_secure_rtc_if(uint32_t packet_id, uint64_t arg1, uint64
  */
 static inline int lv2_ss_aim_if(uint32_t packet_id, uint64_t arg1)
 {
-	lv2syscall2(867, packet_id, arg1);
+	system_call_2(867, packet_id, arg1);
 	return_to_user_prog(int);
 }
 
@@ -315,7 +315,7 @@ static inline int lv2_ss_aim_if(uint32_t packet_id, uint64_t arg1)
 static inline int lv2_ss_indi_info_mgr_if(uint32_t packet_id, uint64_t arg1, uint64_t arg2,
 	uint64_t arg3, uint64_t arg4)
 {
-	lv2syscall5(868, packet_id, arg1, arg2, arg3, arg4);
+	system_call_5(868, packet_id, arg1, arg2, arg3, arg4);
 	return_to_user_prog(int);
 }
 
@@ -324,7 +324,7 @@ static inline int lv2_ss_indi_info_mgr_if(uint32_t packet_id, uint64_t arg1, uin
  */
 static inline int lv2_ss_get_cache_of_flash_ext_flag(uint8_t *flag)
 {
-	lv2syscall1(874, (uint64_t) flag);
+	system_call_1(874, (uint64_t) flag);
 	return_to_user_prog(int);
 }
 
@@ -338,7 +338,7 @@ static inline int lv2_ss_get_cache_of_flash_ext_flag(uint8_t *flag)
  */
 static inline int lv2_get_target_type(uint64_t *type)
 {
-	lv2syscall1(985, (uint64_t) type);
+	system_call_1(985, (uint64_t) type);
 	return_to_user_prog(int);
 }
 
