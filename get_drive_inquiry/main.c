@@ -63,10 +63,6 @@ int sys_storage_send_atapi_command(uint32_t fd, struct lv2_atapi_cmnd_block *ata
 
 void main ()
 {
-	// this poke allows us to use storage open on 4.82DEX
-	lv2_poke(0x80000000000191E0ULL,0x386000014e800020ULL );
-	printf("lv2 poked...\n");
-
 	uint32_t fd;
 	int ret;
 	uint8_t buf[0x38];
@@ -74,7 +70,7 @@ void main ()
 
 
 	// open Blu Ray Drive
-	ret = sys_storage_open(0x101000000000006ULL,&fd);
+	ret = sys_storage_open(0x101000000000006ULL,0,&fd);
 	if(ret != 0)
 	{
 		printf("sys_storage_open failed (0x%x)...\n", ret);
@@ -94,9 +90,5 @@ void main ()
 
 
 	// dump result to file
-	FILE * pFile;
-	pFile = fopen ( "/dev_hdd0/game/myfile.bin" , "wb" );
-	fwrite (buf , 1 , sizeof(buf) , pFile );
-	fclose (pFile);
-	printf("file written...\n");
+	printf("%s\n",buf+8);
 }
