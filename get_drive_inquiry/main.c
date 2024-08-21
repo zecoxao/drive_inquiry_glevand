@@ -63,6 +63,8 @@ int sys_storage_send_atapi_command(uint32_t fd, struct lv2_atapi_cmnd_block *ata
 
 void main ()
 {
+	
+
 	uint32_t fd;
 	int ret;
 	uint8_t buf[0x38];
